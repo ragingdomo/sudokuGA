@@ -8,12 +8,20 @@ import java.util.*;
 public class Chromosome {
     int penalty;
     double fitness;
+    //sBoard is formatted as a 2D array, where each item is an array of the rows.
     int[][] sBoard = {
-            { 8, 3, 9, 0, 6, 2, 0, 1, 0 }, { 0, 0, 6, 0, 0, 3, 2, 0, 8 }, { 0, 0, 0, 0, 9, 1, 0, 5, 0 },
-            { 9, 0, 0, 0, 0, 0, 4, 5, 0 }, { 0, 7, 4, 0, 0, 0, 6, 8, 0 }, { 0, 6, 3, 0, 0, 0, 0, 0, 2 },
-            { 0, 4, 0, 6, 9, 0, 0, 0, 0 }, { 8, 0, 2, 4, 0, 0, 9, 0, 0 }, { 0, 7, 0, 1, 2, 0, 4, 3, 5 }, };
+            { 8, 3, 9, 0, 0, 6, 0, 0, 0 }, 
+            { 0, 6, 2, 0, 0, 3, 0, 9, 1 }, 
+            { 0, 1, 0, 2, 0, 8, 0, 5, 0 },
+            { 9, 0, 0, 0, 7, 4, 0, 6, 3 }, 
+            { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 
+            { 4, 5, 0, 6, 8, 0, 0, 0, 2 },
+            { 0, 4, 0, 8, 0, 2, 0, 7, 0 }, 
+            { 6, 9, 0, 4, 0, 0, 1, 2, 0 }, 
+            { 0, 0, 0, 9, 0, 0, 4, 3, 5 }, };
     int[][] rowBoard;
 
+    //Constructor. Sets
     public Chromosome() {
         sBoard = fill(sBoard);
         penalty = calcPenalty(sBoard);
@@ -27,118 +35,7 @@ public class Chromosome {
         fitness = 1 / penalty;
     }
 
-    public int[][] makeRowBoard(int[][] board) {
-        ArrayList<Integer> row1 = new ArrayList<Integer>();
-        row1.add(board[1][1]);
-        row1.add(board[1][2]);
-        row1.add(board[1][3]);
-        row1.add(board[2][1]);
-        row1.add(board[2][2]);
-        row1.add(board[2][3]);
-        row1.add(board[3][1]);
-        row1.add(board[3][2]);
-        row1.add(board[3][3]);
-
-        ArrayList<Integer> row2 = new ArrayList<Integer>();
-        row2.add(board[1][4]);
-        row2.add(board[1][5]);
-        row2.add(board[1][6]);
-        row2.add(board[2][4]);
-        row2.add(board[2][5]);
-        row2.add(board[2][6]);
-        row2.add(board[3][4]);
-        row2.add(board[3][5]);
-        row2.add(board[3][6]);
-
-        ArrayList<Integer> row3 = new ArrayList<Integer>();
-        row3.add(board[1][7]);
-        row3.add(board[1][8]);
-        row3.add(board[1][9]);
-        row3.add(board[2][7]);
-        row3.add(board[2][8]);
-        row3.add(board[2][9]);
-        row3.add(board[3][7]);
-        row3.add(board[3][8]);
-        row3.add(board[3][9]);
-
-        ArrayList<Integer> row4 = new ArrayList<Integer>();
-        row4.add(board[4][1]);
-        row4.add(board[4][2]);
-        row4.add(board[4][3]);
-        row4.add(board[5][1]);
-        row4.add(board[5][2]);
-        row4.add(board[5][3]);
-        row4.add(board[6][1]);
-        row4.add(board[6][2]);
-        row4.add(board[6][3]);
-
-        ArrayList<Integer> row5 = new ArrayList<Integer>();
-        row5.add(board[4][4]);
-        row5.add(board[4][5]);
-        row5.add(board[4][6]);
-        row5.add(board[5][4]);
-        row5.add(board[5][5]);
-        row5.add(board[5][6]);
-        row5.add(board[6][4]);
-        row5.add(board[6][5]);
-        row5.add(board[6][6]);
-
-        ArrayList<Integer> row6 = new ArrayList<Integer>();
-        row6.add(board[4][7]);
-        row6.add(board[4][8]);
-        row6.add(board[4][9]);
-        row6.add(board[5][7]);
-        row6.add(board[5][8]);
-        row6.add(board[5][9]);
-        row6.add(board[6][7]);
-        row6.add(board[6][8]);
-        row6.add(board[6][9]);
-
-        ArrayList<Integer> row7 = new ArrayList<Integer>();
-        row7.add(board[7][1]);
-        row7.add(board[7][2]);
-        row7.add(board[7][3]);
-        row7.add(board[8][1]);
-        row7.add(board[8][2]);
-        row7.add(board[8][3]);
-        row7.add(board[9][1]);
-        row7.add(board[9][2]);
-        row7.add(board[9][3]);
-
-        ArrayList<Integer> row8 = new ArrayList<Integer>();
-        row8.add(board[7][4]);
-        row8.add(board[7][5]);
-        row8.add(board[7][6]);
-        row8.add(board[8][4]);
-        row8.add(board[8][5]);
-        row8.add(board[8][6]);
-        row8.add(board[9][4]);
-        row8.add(board[9][5]);
-        row8.add(board[9][6]);
-
-        ArrayList<Integer> row9 = new ArrayList<Integer>();
-        row9.add(board[7][7]);
-        row9.add(board[7][8]);
-        row9.add(board[7][9]);
-        row9.add(board[8][7]);
-        row9.add(board[8][8]);
-        row9.add(board[8][9]);
-        row9.add(board[9][7]);
-        row9.add(board[9][8]);
-        row9.add(board[9][9]);
-
-        int[] r1 = row.toArray();
-        int[] r2 = row.toArray();
-        int[] r3 = row.toArray();
-        int[] r4 = row.toArray();
-        int[] r5 = row.toArray();
-        int[] r6 = row.toArray();
-        int[] r7 = row.toArray();
-        int[] r8 = row.toArray();
-        int[] r9 = row.toArray();
-
-        return rowBoard;
-    }
+   
 
     public int[] getBlock(int block) {
         return this.sBoard[block];
@@ -178,7 +75,7 @@ public class Chromosome {
         for (int i = 1; i <= 3; i++) {
             for (int j = 1; j <= 8; j++) {
                 for (int L = j + 1; L <= 9; L++)
-                    if (board[((i+2)][j] == board[i][L])
+                    if (board[(i+2)][j] == board[i][L])
                         pen++;
             }
 
@@ -212,6 +109,6 @@ public class Chromosome {
     }
 
     public String toString(){
-        return ""
+        return "";
     }
 }

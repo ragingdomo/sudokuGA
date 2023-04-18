@@ -1,0 +1,29 @@
+Initialize Population P
+Until stopping_criterion met:
+    G = null
+  While |G| != |P|
+    1. (C1, C2) = Select (P)
+    2. (Ch1, Ch2) = Crossover (C1, C2)
+    3. Ch1 = Mutate (Ch1)
+    4. Ch2 = Mutate (Ch2)
+    5. Add Ch1 and Ch2 to G
+  P = G
+
+
+Sudoku-GA
+Generation G = P
+Generation newG = null
+While Penalty(Best) != 0 and iteration < max_iteration:
+    While |newG| < |G| :
+        Parent1 = K-tournament(G)
+        Parent2 = K-tournament(G-(Parent1))
+        Child = Crossover(parent1, Parent2)
+        Mutate(child, mu)
+        Mutate(Parent1, mu')
+        Mutate(Parent2, mu')
+        bestParent = Best (Parent1, Parent2)
+        newG.add(bestParent)
+        newG.add(child)
+    newG.add(BEST_OF_G)
+    G = newG
+    Purge(G)
