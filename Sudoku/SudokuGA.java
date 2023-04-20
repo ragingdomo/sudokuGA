@@ -37,7 +37,7 @@ public class SudokuGA {
     }
 
     public static Chromosome crossover(Chromosome parent1, Chromosome parent2) {
-        ArrayList<int[]> arr = new ArrayList<int[]>();
+        ArrayList<Integer[]> arr = new ArrayList<Integer[]>();
         for (int i = 0; i < 9; i++) {
             int num = (int) (Math.random() * 2);
             if (num == 1)
@@ -45,15 +45,15 @@ public class SudokuGA {
             else
                 arr.add(parent2.getBlock(i + 1));
         }
-        int[] b1 = arr.get(0);
-        int[] b2 = arr.get(1);
-        int[] b3 = arr.get(2);
-        int[] b4 = arr.get(3);
-        int[] b5 = arr.get(4);
-        int[] b6 = arr.get(5);
-        int[] b7 = arr.get(6);
-        int[] b8 = arr.get(7);
-        int[] b9 = arr.get(8);
+        Integer[] b1 = arr.get(0);
+        Integer[] b2 = arr.get(1);
+        Integer[] b3 = arr.get(2);
+        Integer[] b4 = arr.get(3);
+        Integer[] b5 = arr.get(4);
+        Integer[] b6 = arr.get(5);
+        Integer[] b7 = arr.get(6);
+        Integer[] b8 = arr.get(7);
+        Integer[] b9 = arr.get(8);
         Chromosome c = new Chromosome(b1, b2, b3, b4, b5, b6, b7, b8, b9);
         return c;
     }

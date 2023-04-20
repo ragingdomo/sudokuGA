@@ -1,0 +1,33 @@
+So given a sudoku board stored as an array of blocks, 
+how do you convert it to an array of rows?
+
+To get the first row, take the first three of b1, the first 3 of b2, and the first 3 of b3.
+To get the second row, get the next 3 and so on. 
+to get the third row, get the next 3 after that.
+
+
+Fourth row, we're now operating on on the next 3 blocks. 
+Row four = b4 cell 1-3, b5 cell 1-3, b6 cell 1-3.
+Row five = b4 cell 4-6, b5 cell 4-6, b6 cell 4-6.
+Row six = b4 cell 7-9, b5 cell 7-9, b6 cell 7-9.
+
+
+So to build a row board, for 1 to 3, take
+for (int section=0; section<3; section++){
+    for (int modifier=0; modifier<3; modifier++){
+        for (int block=0; block<3; block++){
+            for (int cell=0 cell<3; cell++){
+                rowBoard[modifier].add(blockBoard[block+(3*section)][cell+(3*modifier)])
+            }
+        }
+    }
+}
+
+[][]
+[][]
+[][]
+[][]
+[][]
+[][]
+[][]
+[][]
