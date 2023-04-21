@@ -7,44 +7,63 @@ import java.util.*;
 // rely on the Chromosome class which still isn't ready. 
 public class SudokuGA {
     public static void main(String args[]) {
-        ArrayList<Chromosome> population = generatePopulation(50);
-        ArrayList<Chromosome> generation = population;
-        int maxIterations = 500;
+        int generationSize = 700;
+        int maxIterations = 3000;
         int currentIterations = 0;
+        int purgeValue = 200;
+        ArrayList<Chromosome> population = generatePopulation(generationSize);
+        ArrayList<Chromosome> generation = population;
+        
+        long startTime = System.currentTimeMillis();
 
         while (currentIterations < maxIterations) {
             ArrayList<Chromosome> newG = new ArrayList<Chromosome>();
             Chromosome best = getBest(generation);
-            if (best.getPenalty() == 0)
+            if (best.getPenalty() == 0){
+                long stopTime = System.currentTimeMillis();
+                System.out.println("Perfect board found!!! And it only took "+((int)((stopTime-startTime)/1000))+" seconds.");
+                System.out.println(best.toString());
                 break;
+            }
+            //fill the new generation
             while (newG.size() < generation.size()) {
+                
                 Chromosome parent1 = kTournament(generation);
                 generation.remove(parent1);
                 Chromosome parent2 = kTournament(generation);
+                generation.remove(parent2);
                 Chromosome child = crossover(parent1, parent2);
-                child.mutate();
-                parent1.mutate();
-                parent2.mutate();
+                child.mutate(0.05);
+                parent1.mutate(0.5);
+                parent2.mutate(0.5);
                 Chromosome bestParent = bestOf(parent1, parent2);
-                newG.add(child);
                 newG.add(bestParent);
+                newG.add(child);
             }
             newG.add(best);
-            currentIterations++;
             generation = newG;
+            currentIterations++;
+            if (currentIterations%purgeValue==0 && currentIterations!=0){
+                generation = purge(generation, best);
+                best.mutate(1);
+                System.out.println("Purging...best penalty: "+best.getPenalty());
+
+            }
         }
-        System.out.println(currentIterations);
+        long stopTime = System.currentTimeMillis();
+        System.out.println("After 3000 generations and "+((int)((stopTime-startTime)/1000))+" seconds, the algorthm has yeilded no perfect boards. :(");
     }
 
     public static Chromosome crossover(Chromosome parent1, Chromosome parent2) {
         ArrayList<Integer[]> arr = new ArrayList<Integer[]>();
-        for (int i = 0; i < 9; i++) {
-            int num = (int) (Math.random() * 2);
-            if (num == 1)
-                arr.add(parent1.getBlock(i + 1));
-            else
-                arr.add(parent2.getBlock(i + 1));
+        for (int block = 0; block < 9; block++) {
+            int randomNumber = (int) (Math.random() * 2);
+            if (randomNumber == 1)
+                arr.add(parent1.getBlock(block));
+             else
+                arr.add(parent2.getBlock(block));
         }
+
         Integer[] b1 = arr.get(0);
         Integer[] b2 = arr.get(1);
         Integer[] b3 = arr.get(2);
@@ -59,46 +78,57 @@ public class SudokuGA {
     }
 
     public static ArrayList<Chromosome> generatePopulation(int size) {
-        ArrayList<Chromosome> arr = new ArrayList<Chromosome>();
-        for (int i = 0; i < size; i++) {
+        ArrayList<Chromosome> populationArray = new ArrayList<Chromosome>();
+        for (int iteration = 0; iteration < size; iteration++) {
             Chromosome c = new Chromosome();
-            arr.add(c);
+            populationArray.add(c);
         }
-        return arr;
+        return populationArray;
     }
 
-    public static Chromosome getBest(ArrayList<Chromosome> generation) {
-        Iterator<Chromosome> iter = generation.iterator();
-        double bestFitness = 0;
-        Chromosome best = new Chromosome();
+    public static Chromosome getBest(ArrayList<Chromosome> dummyGeneration) {
+        Iterator<Chromosome> iter = dummyGeneration.iterator();
+        int lowestPenalty = 0;
+        Chromosome bestChromosome = new Chromosome();
 
         while (iter.hasNext()) {
             Chromosome c = iter.next();
-            double fitness = c.getFitness();
-            if (fitness > bestFitness) {
-                best = c;
-                bestFitness = fitness;
+            int penalty = c.getPenalty();
+            if (penalty < lowestPenalty) {
+                bestChromosome = c;
+                lowestPenalty = penalty;
             }
         }
-        return best;
+        return bestChromosome;
     }
 
     public static Chromosome bestOf(Chromosome parent1, Chromosome parent2) {
-        if (parent1.getFitness() > parent2.getFitness())
+        if (parent1.getPenalty() < parent2.getPenalty())
             return parent1;
         else
             return parent2;
     }
 
-    public static Chromosome kTournament(ArrayList<Chromosome> generation) {
+    //Grab 7 chromosomes at random and return the best (fitness) of those 7
+    public static Chromosome kTournament(ArrayList<Chromosome> dummyGeneration) {
         int k = 7;
         ArrayList<Chromosome> arr = new ArrayList<Chromosome>();
-        Random r = new Random();
         for (int i = 0; i < k; i++) {
-            int ranIndex = r.nextInt();
-            Chromosome copy = generation.get(ranIndex);
+            int ranIndex = (int)(Math.random()*dummyGeneration.size());
+            Chromosome copy = dummyGeneration.get(ranIndex);
             arr.add(copy);
         }
         return getBest(arr);
+    }
+
+    //every 200 iterations, we perform crossover with the current best and everyone in the generation.
+    public static ArrayList<Chromosome> purge(ArrayList<Chromosome> dummyGeneration, Chromosome best){
+        ArrayList<Chromosome> postPurgeGeneration = new ArrayList<Chromosome>();
+        Iterator<Chromosome> iter = dummyGeneration.iterator();
+        while (iter.hasNext()){
+            Chromosome c = iter.next();
+             postPurgeGeneration.add(crossover(best, c));
+        }
+        return postPurgeGeneration;
     }
 }
