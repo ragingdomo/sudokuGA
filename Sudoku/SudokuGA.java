@@ -47,6 +47,8 @@ public class SudokuGA {
                 generation = purge(generation, best);
                 best.mutate(1);
                 System.out.println("Purging...best penalty: "+best.getPenalty());
+                System.out.println(best.toString());
+                System.out.println();
 
             }
         }
@@ -55,7 +57,7 @@ public class SudokuGA {
     }
 
     public static Chromosome crossover(Chromosome parent1, Chromosome parent2) {
-        ArrayList<Integer[]> arr = new ArrayList<Integer[]>();
+        ArrayList<ArrayList<Cell>> arr = new ArrayList<ArrayList<Cell>>();
         for (int block = 0; block < 9; block++) {
             int randomNumber = (int) (Math.random() * 2);
             if (randomNumber == 1)
@@ -64,15 +66,15 @@ public class SudokuGA {
                 arr.add(parent2.getBlock(block));
         }
 
-        Integer[] b1 = arr.get(0);
-        Integer[] b2 = arr.get(1);
-        Integer[] b3 = arr.get(2);
-        Integer[] b4 = arr.get(3);
-        Integer[] b5 = arr.get(4);
-        Integer[] b6 = arr.get(5);
-        Integer[] b7 = arr.get(6);
-        Integer[] b8 = arr.get(7);
-        Integer[] b9 = arr.get(8);
+        ArrayList<Cell> b1 = arr.get(0);
+        ArrayList<Cell> b2 = arr.get(1);
+        ArrayList<Cell> b3 = arr.get(2);
+        ArrayList<Cell> b4 = arr.get(3);
+        ArrayList<Cell> b5 = arr.get(4);
+        ArrayList<Cell> b6 = arr.get(5);
+        ArrayList<Cell> b7 = arr.get(6);
+        ArrayList<Cell> b8 = arr.get(7);
+        ArrayList<Cell> b9 = arr.get(8);
         Chromosome c = new Chromosome(b1, b2, b3, b4, b5, b6, b7, b8, b9);
         return c;
     }
