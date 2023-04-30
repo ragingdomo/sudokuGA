@@ -23,6 +23,11 @@ for (int section=0; section<3; section++){
     }
 }
 
+
+ok next problem, the mutate class. If I fill the board with an object called Cell which has a value and a mutatable piece, i can very easily check if it's original or not. 
+Then the functions will have to be updated to be row[i].value for the rest of the functionality. I think for now, make sure mutate() still  grabs 4 unique dudes?
+I suppose it wouldn't matter as long as they don't happen at the same time. Let the first complete before the second.
+
 [][]
 [][]
 [][]
